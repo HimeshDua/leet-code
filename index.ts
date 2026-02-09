@@ -68,45 +68,53 @@ function isPalindromeInt(x: number) {
 
 // console.log(isPalindromeInt(112));
 
-function romanToInt(s = 'LVIII') { // smaller value negate bigger value
+function romanToInt(s = 'LVIII') {
   const romanvals = { "I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000 };
   type RomanKey = keyof typeof romanvals
 
   const pairs = s.split('') as RomanKey[];
-  const nArr: number[] = [];
+  let total = 0;
 
   for (let i = 0; i < pairs.length; i++) {
-    // const prevSymVal = i - 1 < 1 ? 0 : romanvals[pairs[i - 1]!];
-    // console.log('prevSymVal: ', prevSymVal);
+    const current = romanvals[pairs[i]!];
+    const next = romanvals[pairs[i + 1]!];
 
-    // const currentSymVal = romanvals[pairs[i]!];
+    if (next && current < next) {
+      total -= current
+    } else {
+      total += current
+    }
 
-    // const calculatedV = ((currentSymVal < prevSymVal && prevSymVal > 0)
-    //   ? currentSymVal - prevSymVal
-    //   : currentSymVal + prevSymVal)
-
-    // nArr.push(calculatedV)
-    // nArr.push(100)/
-
-    nArr.push(romanvals[pairs[i]!]);
   }
-  console.log("result: ", nArr.reduce((accu, curr) =>
-    (accu < curr) ?
-      curr - accu : accu + curr
-    , 0))
-
-
-
-
-  // first of all we will check which numericals does "s" has.
-  // check if any of the given value makes negative pair in roman.
-  // if it contains any negative pair, add it into an array
-
-
-
+  console.log("Input:", s, "Result:", total);
 };
 romanToInt("III")
 romanToInt("LVIII")
 romanToInt("MCMXCIV")
+
+
+type Counter = {
+  increment: () => number,
+  decrement: () => number,
+  reset: () => number,
+}
+
+function createCounter(init: number): Counter {
+  let total = init;
+  return {
+    increment: () => ++total,
+    decrement: () => --total,
+    reset: () => total = init
+  }
+};
+
+
+const counter = createCounter(5);
+console.log('increment:', counter.increment());
+console.log('increment:', counter.increment());
+console.log('reset:', counter.reset());
+console.log('decrement:', counter.decrement()); // 4
+console.log('decrement:', counter.decrement()); //3
+console.log('decrement:', counter.decrement()); //2
 
 
